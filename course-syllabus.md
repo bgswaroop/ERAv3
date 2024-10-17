@@ -74,7 +74,6 @@ The course culminates in a capstone project, allowing students to apply their kn
 - **Hands-On Practice with CNNs**: Extensive coding session focused on deepening understanding of CNN implementation.
 - **Advanced CNN Architectures**: Exploring more complex CNN structures like VGG and Inception networks.
 - **Data Augmentation for CNNs**: Applying data augmentation techniques to improve CNN performance.
-
 - **Model Evaluation and Debugging**: Practical examples on how to evaluate CNNs’ performance, debug issues, and fine-tune models.
 
  

@@ -14,7 +14,7 @@ To use this extension:
 2. Create an images folder and add your logo images.
 3. Open Chrome and go to chrome://extensions/.
 4. Enable "Developer mode" in the top right corner.
-5. Click "Load unpacked" and select the directory containing your extension files.\
+5. Click "Load unpacked" and select the directory containing your extension files.
 
 The extension should now be installed and ready to use on YouTube videos.
 
