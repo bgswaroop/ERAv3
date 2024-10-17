@@ -1,8 +1,8 @@
 # <img src="./youtube-snippets-v4/images/icon.svg" width="40" align="left" alt="Icon" style="margin-right: 10px;"> YouTube Snippets
 
-> A chrome extension that allows capturing snippets from YouTube videos
+> A Chrome extension that allows capturing snippets from YouTube videos
 
-Here is a demo: [link to YouTube video]()
+Here is a demo: [link to YouTube video](https://youtu.be/IkcemHtHFO4?si=Lxo15NzBrHdzLlfd)
 
 ## Highlights 🔥
  - Allows to capture snapshots from YouTube. Each snapshot contains:
