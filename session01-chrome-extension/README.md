@@ -1,6 +1,6 @@
 # <img src="./youtube-snippets-v4/images/icon.svg" width="40" align="left" alt="Icon" style="margin-right: 10px;"> YouTube Snippets
 
-> A chrome application that allows capturing snippets from YouTube videos
+> A chrome extension that allows capturing snippets from YouTube videos
 
 Here is a demo: [link to YouTube video]()
 
