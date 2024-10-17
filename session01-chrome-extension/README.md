@@ -1,8 +1,17 @@
-![Icon](./youtube-snippets-v4/images/icon16.png) YouTube Snippets
--
-This application allows to capture snippets from YouTube videos - allows us to save the subtitles (when enabled/available), save the time of the video, and the timestamp at which the note was captured. 
+# <img src="./youtube-snippets-v4/images/icon.svg" width="40" align="left" alt="Icon" style="margin-right: 10px;"> YouTube Snippets
+
+> A chrome application that allows capturing snippets from YouTube videos
 
 Here is a demo: [link to YouTube video]()
+
+## Highlights 🔥
+ - Allows to capture snapshots from YouTube. Each snapshot contains:
+   - The timestamp at which the snapshot was captured
+   - The title of the video
+   - The link to the video at that timestamp
+   - A brief snippet from the subtitles at that snapshot (when enabled/available)
+ - Export snapshots to a text file
+ - Copy the snapshots to the clipboard for use in other applications
 
 Here is a sample of how it looks:\
 <img src="sample.png" alt="drawing" width="350px"/>
