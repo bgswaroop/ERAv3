@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Snippets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>YouTube Snippets</h1>
+    <button id="captureBtn" class="btn primary">Capture Snippet</button>
+    <div class="select-all-container">
+      <input type="checkbox" id="selectAll">
+      <label for="selectAll">Select All</label>
+    </div>
+    <div id="snippets"></div>
+    <div class="actions">
+      <button id="copyBtn" class="btn secondary">Copy Selected</button>
+      <button id="downloadBtn" class="btn secondary">Download Selected</button>
+      <button id="deleteBtn" class="btn danger">Delete Selected</button>
+    </div>
+    <div id="message" class="message"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>
