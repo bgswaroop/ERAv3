@@ -2,7 +2,7 @@
 
 > A FastAPI based webserver with HTTP request and response. This is like a Hello World program.
 
-Here is a demo: [link to YouTube video]()
+Here is a demo: [link to YouTube video](https://youtu.be/FHEqujUNIO8?si=JoxSbbGKj4wytLBJ)
 
 ## Highlights 🔥
  - The frontend is implemented using HTML, CSS, and JavaScript files which has two boxes:
