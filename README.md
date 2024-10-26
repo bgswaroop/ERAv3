@@ -4,3 +4,5 @@ This repository concerns the exciting weekly mini-projects of the 8-month-long E
 - **Session 1**: Getting over the fear of building anything! Learn to use LLMs to build simple end-to-end applications, like "Google Chrome Extensions". Check out the [YouTube snippets](./session01-chrome-extension/youtube-snippets-v4/) chrome extension.  
 
 - **Session 2**: Getting over the fear of building anything! Learn to use LLMs to build simple end-to-end applications. Build a basic web-server which runs locally. Check out the [webserver](./session02-web-server-hello-world/), built with FastAPI.
+
+- **Session 3**: Data Representation, Preprocessing, and UI Integration: <to-do: add documentation>

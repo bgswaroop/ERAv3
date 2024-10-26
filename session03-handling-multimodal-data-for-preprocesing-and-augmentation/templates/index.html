@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Processing App</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="app-title">Text Processing App</h1>
+        </header>
+        <main>
+            <div class="top-section">
+                <section class="card upload-section">
+                    <h2>Upload File</h2>
+                    <input type="file" id="fileInput" accept=".txt">
+                    <button id="uploadButton" class="btn btn-primary">Upload</button>
+                </section>
+                <section class="card process-section">
+                    <h2>Process Data</h2>
+                    <button id="preprocessButton" class="btn btn-secondary">Preprocess</button>
+                    <button id="augmentButton" class="btn btn-secondary">Augment</button>
+                </section>
+            </div>
+            <section class="card result-section">
+                <h2>Results</h2>
+                <div class="result-container">
+                    <div id="resultInfo" class="result-info"></div>
+                    <div id="resultArea"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
