@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function uploadFile() {
+  showLoading();
   console.log('uploadFile function called');
   const fileInput = document.getElementById('fileInput');
   const file = fileInput.files[0];
@@ -51,10 +52,13 @@ async function uploadFile() {
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while uploading the file.');
+  } finally {
+      hideLoading();
   }
 }
 
 async function preprocessData() {
+  showLoading();
   console.log('preprocessData function called');
   try {
       const response = await fetch('/preprocess', { method: 'POST' });
@@ -63,10 +67,13 @@ async function preprocessData() {
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while preprocessing the data.');
+  } finally {
+    hideLoading();
   }
 }
 
 async function augmentData() {
+  showLoading();
   console.log('augmentData function called');
   try {
       const response = await fetch('/augment', { method: 'POST' });
@@ -75,6 +82,8 @@ async function augmentData() {
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while augmenting the data.');
+  } finally {
+    hideLoading();
   }
 }
 
@@ -105,4 +114,12 @@ function escapeHtml(unsafe) {
        .replace(/>/g, "&gt;")
        .replace(/"/g, "&quot;")
        .replace(/'/g, "&#039;");
+}
+
+function showLoading() {
+  document.getElementById('spinner').style.display = 'block';
+}
+
+function hideLoading() {
+  document.getElementById('spinner').style.display = 'none';
 }
