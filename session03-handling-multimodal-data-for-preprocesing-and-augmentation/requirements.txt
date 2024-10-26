@@ -4,3 +4,6 @@ python-multipart
 jinja2
 torch
 transformers
+Pillow
+librosa
+trimesh

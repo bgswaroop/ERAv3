@@ -26,6 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Event listeners added');
 });
 
+// Add sidebar functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.querySelector('.sidebar');
+  const sidebarToggle = document.querySelector('.sidebar-toggle');
+  const mainContent = document.querySelector('.main-content');
+
+  sidebarToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('open');
+      mainContent.classList.toggle('sidebar-open');
+  });
+});
+
 async function uploadFile() {
   showLoading();
   console.log('uploadFile function called');
@@ -40,7 +52,7 @@ async function uploadFile() {
   formData.append('file', file);
 
   try {
-      const response = await fetch('/upload', {
+      const response = await fetch('/text/upload', {
           method: 'POST',
           body: formData
       });
@@ -61,7 +73,7 @@ async function preprocessData() {
   showLoading();
   console.log('preprocessData function called');
   try {
-      const response = await fetch('/preprocess', { method: 'POST' });
+      const response = await fetch('/text/preprocess', { method: 'POST' });
       const result = await response.json();
       displayResult('Preprocessed Data:', result.full_content, { token_count: result.token_count });
   } catch (error) {
@@ -76,7 +88,7 @@ async function augmentData() {
   showLoading();
   console.log('augmentData function called');
   try {
-      const response = await fetch('/augment', { method: 'POST' });
+      const response = await fetch('/text/augment', { method: 'POST' });
       const result = await response.json();
       displayResult('Augmented Data:', result.full_content, { token_count: result.token_count });
   } catch (error) {
