@@ -1,0 +1,2 @@
+# Ignore the directory /static/uploads
+/static/uploads/*

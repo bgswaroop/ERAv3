@@ -8,6 +8,9 @@ from transformers import BertTokenizer
 import random
 import logging
 import re
+import shutil
+import os
+import uuid
 
 logging.basicConfig(level=logging.INFO)
 
@@ -23,6 +26,7 @@ class TextData(BaseModel):
 original_data = ""
 preprocessed_data = ""
 augmented_data = ""
+image_file_path = ""
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
@@ -104,6 +108,22 @@ def get_word_count(text):
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     word_count = len(cleaned_text.split())
     return word_count
+
+@app.post("/image/upload")
+async def upload_image_file(file: UploadFile = File(...)):
+    upload_dir = "static/uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+    unique_filename = f"{uuid.uuid4()}_{file.filename}"
+    file_path = os.path.join(upload_dir, unique_filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    logging.info(f"Image file uploaded: {file.filename}, saved to: {file_path}")
+    return JSONResponse(content={
+        "message": "File uploaded successfully", 
+        "file_url": f"/static/uploads/{unique_filename}"
+    })
 
 if __name__ == "__main__":
     import uvicorn

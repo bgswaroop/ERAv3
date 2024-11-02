@@ -47,7 +47,7 @@ async function uploadImage() {
           body: formData
       });
       const result = await response.json();
-      displayResult('Original Image:', result.full_content);
+      displayResult('Original Image:', result.file_url);
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while uploading the image.');
@@ -77,7 +77,7 @@ function displayResult(title, content) {
 
   if (resultArea) {
     resultInfo.innerHTML = '';
-    resultArea.innerHTML = `<h3>${title}</h3><pre>${escapeHtml(content)}</pre>`;
+    resultArea.innerHTML = `<h3>${title}</h3><img src="${content}" alt="${title}" />`;
   } else {
       console.error('Result area not found');
   }
@@ -86,7 +86,7 @@ function displayResult(title, content) {
 function escapeHtml(unsafe) {
   return unsafe
        .replace(/&/g, "&amp;")
-       .replace(/</g, "&lt;")
+       .replace(/<//g, "&lt;")
        .replace(/>/g, "&gt;")
        .replace(/"/g, "&quot;")
        .replace(/'/g, "&#039;");
