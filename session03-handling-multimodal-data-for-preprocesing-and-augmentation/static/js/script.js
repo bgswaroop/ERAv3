@@ -24,10 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   console.log('Event listeners added');
-});
 
-// Add sidebar functionality
-document.addEventListener('DOMContentLoaded', function() {
   const sidebar = document.querySelector('.sidebar');
   const sidebarToggle = document.querySelector('.sidebar-toggle');
   const mainContent = document.querySelector('.main-content');
