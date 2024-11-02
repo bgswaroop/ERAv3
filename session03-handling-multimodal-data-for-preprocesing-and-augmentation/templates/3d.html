@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Modal Processing App - 3D Data Processing</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <button class="sidebar-toggle">☰</button>
+        <nav class="sidebar-menu">
+            <a href="/text">Text Processing</a>
+            <a href="/image">Image Processing</a>
+            <a href="/audio">Audio Processing</a>
+            <a href="/3d">3D Data Processing</a>
+        </nav>
+    </div>
+    <div class="main-content">
+        <div class="container">
+            <header>
+                <h1 class="app-title">3D Data Processing</h1>
+            </header>
+            <main>
+                <div class="top-section">
+                    <section class="card upload-section">
+                        <h2>Upload 3D Data</h2>
+                        <input type="file" id="3dInput" accept=".obj,.stl">
+                        <button id="upload3dButton" class="btn btn-primary">Upload</button>
+                    </section>
+                    <section class="card process-section">
+                        <h2>Process 3D Data</h2>
+                        <button id="process3dButton" class="btn btn-secondary">Process</button>
+                    </section>
+                </div>
+                <section class="card result-section">
+                    <div class="result-header">
+                        <div class="result-title-area">
+                            <h2>Results</h2>
+                            <div id="3dSpinner" class="spinner" style="display: none;"></div>
+                        </div>
+                        <div id="3dResultInfo" class="result-info"></div>
+                    </div>
+                    <div class="result-container">
+                        <div id="3dResultArea"></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
