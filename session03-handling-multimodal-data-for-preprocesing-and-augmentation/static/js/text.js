@@ -54,9 +54,6 @@ async function uploadFile() {
           body: formData
       });
       const result = await response.json();
-      // if (result.message) {
-      //     alert(result.message);
-      // }
       displayResult('Original Data:', result.full_content, { word_count: result.word_count });
   } catch (error) {
       console.error('Error:', error);
