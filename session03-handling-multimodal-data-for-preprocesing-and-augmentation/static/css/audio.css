@@ -1,0 +1,20 @@
+.result-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+audio {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 600px;
+}
+
+#audioPlayer {
+    margin-bottom: 10px; /* Add a small gap below the audio player */
+}
+
+#audioResultInfo {
+    margin-top: 10px; /* Add a small gap above the result info */
+}

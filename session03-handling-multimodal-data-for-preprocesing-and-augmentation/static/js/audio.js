@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM fully loaded and parsed');
 
   const uploadAudioButton = document.getElementById('uploadAudioButton');
-  const processAudioButton = document.getElementById('processAudioButton');
+  const preprocessAudioButton = document.getElementById('preprocessAudioButton');
+  const augmentAudioButton = document.getElementById('augmentAudioButton');
 
   if (uploadAudioButton) {
       uploadAudioButton.addEventListener('click', uploadAudio);
@@ -10,10 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('Upload audio button not found');
   }
 
-  if (processAudioButton) {
-      processAudioButton.addEventListener('click', processAudio);
+  if (preprocessAudioButton) {
+      preprocessAudioButton.addEventListener('click', preprocessAudio);
   } else {
-      console.error('Process audio button not found');
+      console.error('Preprocess audio button not found');
+  }
+
+  if (augmentAudioButton) {
+      augmentAudioButton.addEventListener('click', augmentAudio);
+  } else {
+      console.error('Augment audio button not found');
   }
 
   console.log('Event listeners added');
@@ -48,7 +55,7 @@ async function uploadAudio() {
           body: formData
       });
       const result = await response.json();
-      displayResult('Original Audio:', result.file_url);
+      displayResult('Original Audio:', result.file_url, result.message);
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while uploading the audio.');
@@ -57,31 +64,46 @@ async function uploadAudio() {
   }
 }
 
-async function processAudio() {
+async function preprocessAudio() {
   showLoading();
-  console.log('processAudio function called');
+  console.log('preprocessAudio function called');
   try {
-      const response = await fetch('/audio/process', { method: 'POST' });
+      const response = await fetch('/audio/preprocess', { method: 'POST' });
       const result = await response.json();
-      displayResult('Processed Audio:', result.full_content);
+      displayResult('Preprocessed Audio:', result.full_content, result.message);
   } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while processing the audio.');
+      alert('An error occurred while preprocessing the audio.');
   } finally {
-    hideLoading();
+      hideLoading();
   }
 }
 
-function displayResult(title, content) {
+async function augmentAudio() {
+  showLoading();
+  console.log('augmentAudio function called');
+  try {
+      const response = await fetch('/audio/augment', { method: 'POST' });
+      const result = await response.json();
+      displayResult('Augmented Audio:', result.full_content, result.message);
+  } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while augmenting the audio.');
+  } finally {
+      hideLoading();
+  }
+}
+
+function displayResult(title, content, message = '') {
   const resultArea = document.getElementById('audioResultArea');
   const resultInfo = document.getElementById('audioResultInfo');
   const audioPlayer = document.getElementById('audioPlayer');
 
   if (resultArea && audioPlayer) {
-    resultInfo.innerHTML = '';
     resultArea.innerHTML = `<h3>${title}</h3>`;
     audioPlayer.src = content;
     audioPlayer.style.display = 'block';
+    resultInfo.innerText = message;
   } else {
       console.error('Result area or audio player not found');
   }

@@ -14,6 +14,9 @@ import uuid
 from PIL import Image
 import numpy as np
 import torchvision.transforms as transforms
+import torchaudio
+import torchaudio.transforms as T
+from pydub import AudioSegment
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,6 +33,7 @@ original_data = ""
 preprocessed_data = ""
 augmented_data = ""
 image_file_path = ""
+audio_file_path = ""
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
@@ -218,8 +222,22 @@ def save_image(image, prefix):
     logging.info(f"Image saved: {file_path}")
     return unique_filename
 
+def convert_mp3_to_wav(mp3_path):
+    audio = AudioSegment.from_mp3(mp3_path)
+    wav_path = mp3_path.replace(".mp3", ".wav")
+    audio.export(wav_path, format="wav")
+    return wav_path
+
+def load_audio(file_path):
+    audio = AudioSegment.from_file(file_path)
+    samples = np.array(audio.get_array_of_samples())
+    waveform = torch.tensor(samples).float().view(1, -1)
+    sample_rate = audio.frame_rate
+    return waveform, sample_rate
+
 @app.post("/audio/upload")
 async def upload_audio_file(file: UploadFile = File(...)):
+    global audio_file_path
     upload_dir = "static/uploads"
     os.makedirs(upload_dir, exist_ok=True)
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
@@ -228,11 +246,73 @@ async def upload_audio_file(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     
+    if file.filename.endswith(".mp3"):
+        file_path = convert_mp3_to_wav(file_path)
+    
+    audio_file_path = file_path
     logging.info(f"Audio file uploaded: {file.filename}, saved to: {file_path}")
     return JSONResponse(content={
         "message": "File uploaded successfully", 
-        "file_url": f"/static/uploads/{unique_filename}"
+        "file_url": f"/static/uploads/{os.path.basename(file_path)}"
     })
+
+@app.post("/audio/preprocess")
+async def preprocess_audio():
+    global audio_file_path
+    if not audio_file_path:
+        raise HTTPException(status_code=400, detail="No audio uploaded")
+    
+    waveform, sample_rate = load_audio(audio_file_path)
+    transform = T.Resample(orig_freq=sample_rate, new_freq=16000)
+    preprocessed_waveform = transform(waveform)
+    preprocessed_audio_path = save_audio(preprocessed_waveform, "preprocessed", 16000)
+    
+    return JSONResponse(content={
+        "full_content": f"/static/uploads/{preprocessed_audio_path}",
+        "message": "Resampled audio to 16kHz."
+    })
+
+@app.post("/audio/augment")
+async def augment_audio():
+    global audio_file_path
+    if not audio_file_path:
+        raise HTTPException(status_code=400, detail="No audio uploaded")
+    
+    waveform, sample_rate = load_audio(audio_file_path)
+    
+    # Apply volume reduction
+    vol_transform = T.Vol(0.5)
+    waveform = vol_transform(waveform)
+    
+    # Apply frequency masking
+    freq_mask_transform = T.FrequencyMasking(freq_mask_param=30)
+    waveform = freq_mask_transform(waveform)
+    
+    # Apply time masking
+    time_mask_transform = T.TimeMasking(time_mask_param=100)
+    waveform = time_mask_transform(waveform)
+    
+    augmented_audio_path = save_audio(waveform, "augmented", sample_rate)
+    
+    return JSONResponse(content={
+        "full_content": f"/static/uploads/{augmented_audio_path}",
+        "message": "Applied volume reduction, frequency masking, and time masking."
+    })
+
+def save_audio(waveform, prefix, sample_rate):
+    upload_dir = "static/uploads"
+    unique_filename = f"{prefix}_{uuid.uuid4()}.wav"
+    file_path = os.path.join(upload_dir, unique_filename)
+    waveform = waveform.numpy().astype(np.int16)
+    audio = AudioSegment(
+        waveform.tobytes(), 
+        frame_rate=sample_rate,
+        sample_width=waveform.dtype.itemsize, 
+        channels=1
+    )
+    audio.export(file_path, format="wav")
+    logging.info(f"Audio saved: {file_path}")
+    return unique_filename
 
 @app.post("/3d/upload")
 async def upload_3d_file(file: UploadFile = File(...)):
