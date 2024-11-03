@@ -1,24 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM fully loaded and parsed');
 
-  const uploadButton = document.getElementById('uploadButton');
-  const preprocessButton = document.getElementById('preprocessButton');
-  const augmentButton = document.getElementById('augmentButton');
+  const uploadTextButton = document.getElementById('uploadTextButton');
+  const preprocessTextButton = document.getElementById('preprocessTextButton');
+  const augmentTextButton = document.getElementById('augmentTextButton');
 
-  if (uploadButton) {
-      uploadButton.addEventListener('click', uploadFile);
+  if (uploadTextButton) {
+      uploadTextButton.addEventListener('click', uploadTextFile);
   } else {
       console.error('Upload button not found');
   }
 
-  if (preprocessButton) {
-      preprocessButton.addEventListener('click', preprocessData);
+  if (preprocessTextButton) {
+      preprocessTextButton.addEventListener('click', preprocessTextData);
   } else {
       console.error('Preprocess button not found');
   }
 
-  if (augmentButton) {
-      augmentButton.addEventListener('click', augmentData);
+  if (augmentTextButton) {
+      augmentTextButton.addEventListener('click', augmentTextData);
   } else {
       console.error('Augment button not found');
   }
@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-async function uploadFile() {
+async function uploadTextFile() {
   showLoading();
-  console.log('uploadFile function called');
-  const fileInput = document.getElementById('fileInput');
+  console.log('uploadTextFile function called');
+  const fileInput = document.getElementById('textFileInput');
   const file = fileInput.files[0];
   if (!file) {
       alert('Please select a file first!');
@@ -63,9 +63,9 @@ async function uploadFile() {
   }
 }
 
-async function preprocessData() {
+async function preprocessTextData() {
   showLoading();
-  console.log('preprocessData function called');
+  console.log('preprocessTextData function called');
   try {
       const response = await fetch('/text/preprocess', { method: 'POST' });
       const result = await response.json();
@@ -78,9 +78,9 @@ async function preprocessData() {
   }
 }
 
-async function augmentData() {
+async function augmentTextData() {
   showLoading();
-  console.log('augmentData function called');
+  console.log('augmentTextData function called');
   try {
       const response = await fetch('/text/augment', { method: 'POST' });
       const result = await response.json();
