@@ -30,24 +30,49 @@ image_file_path = ""
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
+@app.on_event("startup")
+async def startup_event():
+    clear_uploads()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    clear_uploads()
+
+def clear_uploads():
+    upload_dir = "static/uploads"
+    if os.path.exists(upload_dir):
+        for filename in os.listdir(upload_dir):
+            file_path = os.path.join(upload_dir, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                    logging.info(f"Deleted file: {file_path}")
+            except Exception as e:
+                logging.error(f"Error deleting file {file_path}: {e}")
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
+    clear_uploads()
     return templates.TemplateResponse("text.html", {"request": request})
 
 @app.get("/text", response_class=HTMLResponse)
 async def text_processing(request: Request):
+    clear_uploads()
     return templates.TemplateResponse("text.html", {"request": request})
 
 @app.get("/image", response_class=HTMLResponse)
 async def image_processing(request: Request):
+    clear_uploads()
     return templates.TemplateResponse("image.html", {"request": request})
 
 @app.get("/audio", response_class=HTMLResponse)
 async def audio_processing(request: Request):
+    clear_uploads()
     return templates.TemplateResponse("audio.html", {"request": request})
 
 @app.get("/3d", response_class=HTMLResponse)
 async def three_d_processing(request: Request):
+    clear_uploads()
     return templates.TemplateResponse("3d.html", {"request": request})
 
 @app.post("/text/upload")
@@ -55,7 +80,15 @@ async def upload_text_file(file: UploadFile = File(...)):
     global original_data
     content = await file.read()
     original_data = content.decode("utf-8")
-    logging.info(f"Text file uploaded: {file.filename}, content length: {len(original_data)}")
+    upload_dir = "static/uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+    unique_filename = f"{uuid.uuid4()}_{file.filename}"
+    file_path = os.path.join(upload_dir, unique_filename)
+    
+    with open(file_path, "w") as buffer:
+        buffer.write(original_data)
+    
+    logging.info(f"Text file uploaded: {file.filename}, saved to: {file_path}")
     return JSONResponse(content={
         "message": "File uploaded successfully", 
         "sample": original_data[:100], 
@@ -120,6 +153,38 @@ async def upload_image_file(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     
     logging.info(f"Image file uploaded: {file.filename}, saved to: {file_path}")
+    return JSONResponse(content={
+        "message": "File uploaded successfully", 
+        "file_url": f"/static/uploads/{unique_filename}"
+    })
+
+@app.post("/audio/upload")
+async def upload_audio_file(file: UploadFile = File(...)):
+    upload_dir = "static/uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+    unique_filename = f"{uuid.uuid4()}_{file.filename}"
+    file_path = os.path.join(upload_dir, unique_filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    logging.info(f"Audio file uploaded: {file.filename}, saved to: {file_path}")
+    return JSONResponse(content={
+        "message": "File uploaded successfully", 
+        "file_url": f"/static/uploads/{unique_filename}"
+    })
+
+@app.post("/3d/upload")
+async def upload_3d_file(file: UploadFile = File(...)):
+    upload_dir = "static/uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+    unique_filename = f"{uuid.uuid4()}_{file.filename}"
+    file_path = os.path.join(upload_dir, unique_filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    logging.info(f"3D file uploaded: {file.filename}, saved to: {file_path}")
     return JSONResponse(content={
         "message": "File uploaded successfully", 
         "file_url": f"/static/uploads/{unique_filename}"
