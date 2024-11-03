@@ -1,0 +1,37 @@
+.result-container {
+    display: flex;
+    gap: 20px; /* Space between the info and the image */
+    align-items: flex-start; /* Align items to the top */
+    width: 100%;
+    height: 45vh; /* Ensure the container has a fixed height */
+}
+
+#imageResultInfo {
+    flex: 0 0 25%; /* Fixed width of 25% */
+    display: flex;
+    flex-direction: column; /* Ensure the message appears below the title */
+    gap: 10px; /* Space between title and message */
+}
+
+#imageResultInfo h3 {
+    width: 100%; /* Ensure the title takes the full width of the info section */
+    word-wrap: break-word; /* Ensure text wraps within the fixed width */
+}
+
+#imageResultArea {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Center the image along horizontal axis */
+    align-items: center; /* Center the image along vertical axis */
+    gap: 10px; /* Space between title and image */
+    width: 100%;
+    height: 100%;
+}
+
+#imageResultArea img {
+    max-width: 100%; /* Adjust the width to account for the title width and gap */
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain; /* Ensures the image fits within the container */
+}

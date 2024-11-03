@@ -69,8 +69,7 @@ async function preprocessImage() {
   try {
       const response = await fetch('/image/preprocess', { method: 'POST' });
       const result = await response.json();
-      displayResult('Preprocessed Image:', result.full_content);
-      document.getElementById('imageResultInfo').innerText = result.message;
+      displayResult('Preprocessed Image:', result.full_content, result.message);
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while preprocessing the image.');
@@ -85,8 +84,7 @@ async function augmentImage() {
   try {
       const response = await fetch('/image/augment', { method: 'POST' });
       const result = await response.json();
-      displayResult('Augmented Image:', result.full_content);
-      document.getElementById('imageResultInfo').innerText = result.message;
+      displayResult('Augmented Image:', result.full_content, result.message);
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while augmenting the image.');
@@ -95,13 +93,13 @@ async function augmentImage() {
   }
 }
 
-function displayResult(title, content) {
+function displayResult(title, content, message = '') {
   const resultArea = document.getElementById('imageResultArea');
   const resultInfo = document.getElementById('imageResultInfo');
 
   if (resultArea) {
-    resultInfo.innerHTML = '';
-    resultArea.innerHTML = `<h3>${title}</h3><img src="${content}" alt="${title}" />`;
+    resultInfo.innerHTML = `<h3>${title}</h3>${message ? `<p>${message}</p>` : ''}`;
+    resultArea.innerHTML = `<img src="${content}" alt="${title}" />`;
   } else {
       console.error('Result area not found');
   }

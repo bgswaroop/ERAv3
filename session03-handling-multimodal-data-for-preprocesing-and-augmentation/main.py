@@ -183,7 +183,7 @@ async def preprocess_image():
     
     return JSONResponse(content={
         "full_content": f"/static/uploads/{preprocessed_image_path}",
-        "message": "Image Preprocessing: Subtracted mean and divided by standard deviation. Rescaled for visualization."
+        "message": "Subtracted mean and divided by standard deviation. Rescaled for visualization."
     })
 
 @app.post("/image/augment")
@@ -207,7 +207,7 @@ async def augment_image():
     
     return JSONResponse(content={
         "full_content": f"/static/uploads/{augmented_image_path}",
-        "message": "Image Augmentation: Applied random transformations. Rescaled for visualization."
+        "message": "Applied random transformations (horizontal flip and rotate). Rescaled for visualization."
     })
 
 def save_image(image, prefix):
