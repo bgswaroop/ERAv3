@@ -34,6 +34,7 @@ async function uploadAudio() {
   const audioInput = document.getElementById('audioInput');
   const file = audioInput.files[0];
   if (!file) {
+      hideLoading();
       alert('Please select an audio file first!');
       return;
   }
@@ -47,7 +48,7 @@ async function uploadAudio() {
           body: formData
       });
       const result = await response.json();
-      displayResult('Original Audio:', result.full_content);
+      displayResult('Original Audio:', result.file_url);
   } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while uploading the audio.');
@@ -74,12 +75,15 @@ async function processAudio() {
 function displayResult(title, content) {
   const resultArea = document.getElementById('audioResultArea');
   const resultInfo = document.getElementById('audioResultInfo');
+  const audioPlayer = document.getElementById('audioPlayer');
 
-  if (resultArea) {
+  if (resultArea && audioPlayer) {
     resultInfo.innerHTML = '';
-    resultArea.innerHTML = `<h3>${title}</h3><pre>${escapeHtml(content)}</pre>`;
+    resultArea.innerHTML = `<h3>${title}</h3>`;
+    audioPlayer.src = content;
+    audioPlayer.style.display = 'block';
   } else {
-      console.error('Result area not found');
+      console.error('Result area or audio player not found');
   }
 }
 

@@ -237,4 +237,9 @@ input[type="file"] {
   margin-left: 250px;
 }
 
+audio {
+    width: 100%;
+    margin-top: 10px;
+}
+
 /* Add more styles for image, audio, and 3D processing elements */
