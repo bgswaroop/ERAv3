@@ -163,14 +163,20 @@ input[type="file"] {
   display: flex;
   justify-content: center; /* Center the image along horizontal axis */
   align-items: center; /* Center the image along vertical axis */
+  gap: 10px; /* Space between title and image */
 }
 
 #imageResultArea img {
-  max-width: 100%;
+  max-width: calc(100% - 210px); /* Adjust the width to account for the title width and gap */
   max-height: 100%;
   display: block;
   margin: 0 auto;
   object-fit: contain; /* Ensures the image fits within the container */
+}
+
+#imageResultArea h3 {
+  width: 200px; /* Set the desired fixed width */
+  word-wrap: break-word; /* Ensure text wraps within the fixed width */
 }
 
 #resultArea {

@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM fully loaded and parsed');
 
   const uploadImageButton = document.getElementById('uploadImageButton');
-  const processImageButton = document.getElementById('processImageButton');
+  const preprocessImageButton = document.getElementById('preprocessImageButton');
+  const augmentImageButton = document.getElementById('augmentImageButton');
 
   if (uploadImageButton) {
       uploadImageButton.addEventListener('click', uploadImage);
@@ -10,10 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('Upload image button not found');
   }
 
-  if (processImageButton) {
-      processImageButton.addEventListener('click', processImage);
+  if (preprocessImageButton) {
+      preprocessImageButton.addEventListener('click', preprocessImage);
   } else {
-      console.error('Process image button not found');
+      console.error('Preprocess image button not found');
+  }
+
+  if (augmentImageButton) {
+      augmentImageButton.addEventListener('click', augmentImage);
+  } else {
+      console.error('Augment image button not found');
   }
 
   console.log('Event listeners added');
@@ -56,18 +63,35 @@ async function uploadImage() {
   }
 }
 
-async function processImage() {
+async function preprocessImage() {
   showLoading();
-  console.log('processImage function called');
+  console.log('preprocessImage function called');
   try {
-      const response = await fetch('/image/process', { method: 'POST' });
+      const response = await fetch('/image/preprocess', { method: 'POST' });
       const result = await response.json();
-      displayResult('Processed Image:', result.full_content);
+      displayResult('Preprocessed Image:', result.full_content);
+      document.getElementById('imageResultInfo').innerText = result.message;
   } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while processing the image.');
+      alert('An error occurred while preprocessing the image.');
   } finally {
-    hideLoading();
+      hideLoading();
+  }
+}
+
+async function augmentImage() {
+  showLoading();
+  console.log('augmentImage function called');
+  try {
+      const response = await fetch('/image/augment', { method: 'POST' });
+      const result = await response.json();
+      displayResult('Augmented Image:', result.full_content);
+      document.getElementById('imageResultInfo').innerText = result.message;
+  } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while augmenting the image.');
+  } finally {
+      hideLoading();
   }
 }
 

@@ -11,6 +11,9 @@ import re
 import shutil
 import os
 import uuid
+from PIL import Image
+import numpy as np
+import torchvision.transforms as transforms
 
 logging.basicConfig(level=logging.INFO)
 
@@ -144,6 +147,7 @@ def get_word_count(text):
 
 @app.post("/image/upload")
 async def upload_image_file(file: UploadFile = File(...)):
+    global image_file_path
     upload_dir = "static/uploads"
     os.makedirs(upload_dir, exist_ok=True)
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
@@ -152,11 +156,67 @@ async def upload_image_file(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     
+    image_file_path = file_path
     logging.info(f"Image file uploaded: {file.filename}, saved to: {file_path}")
     return JSONResponse(content={
         "message": "File uploaded successfully", 
         "file_url": f"/static/uploads/{unique_filename}"
     })
+
+@app.post("/image/preprocess")
+async def preprocess_image():
+    global image_file_path
+    if not image_file_path:
+        raise HTTPException(status_code=400, detail="No image uploaded")
+    
+    image = Image.open(image_file_path)
+    preprocess = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    image_tensor = preprocess(image)
+    image_np = image_tensor.numpy().transpose(1, 2, 0)
+    image_np = (image_np - image_np.min()) / (image_np.max() - image_np.min()) * 255
+    image_np = image_np.astype(np.uint8)
+    preprocessed_image = Image.fromarray(image_np)
+    preprocessed_image_path = save_image(preprocessed_image, "preprocessed")
+    
+    return JSONResponse(content={
+        "full_content": f"/static/uploads/{preprocessed_image_path}",
+        "message": "Image Preprocessing: Subtracted mean and divided by standard deviation. Rescaled for visualization."
+    })
+
+@app.post("/image/augment")
+async def augment_image():
+    global image_file_path
+    if not image_file_path:
+        raise HTTPException(status_code=400, detail="No image uploaded")
+    
+    image = Image.open(image_file_path)
+    augment = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(30),
+        transforms.ToTensor()
+    ])
+    image_tensor = augment(image)
+    image_np = image_tensor.numpy().transpose(1, 2, 0)
+    image_np = (image_np - image_np.min()) / (image_np.max() - image_np.min()) * 255
+    image_np = image_np.astype(np.uint8)
+    augmented_image = Image.fromarray(image_np)
+    augmented_image_path = save_image(augmented_image, "augmented")
+    
+    return JSONResponse(content={
+        "full_content": f"/static/uploads/{augmented_image_path}",
+        "message": "Image Augmentation: Applied random transformations. Rescaled for visualization."
+    })
+
+def save_image(image, prefix):
+    upload_dir = "static/uploads"
+    unique_filename = f"{prefix}_{uuid.uuid4()}.png"
+    file_path = os.path.join(upload_dir, unique_filename)
+    image.save(file_path)
+    logging.info(f"Image saved: {file_path}")
+    return unique_filename
 
 @app.post("/audio/upload")
 async def upload_audio_file(file: UploadFile = File(...)):
